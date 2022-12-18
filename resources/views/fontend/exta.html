@@ -1,0 +1,288 @@
+<header class="header" style="display: initial;">
+			<!-------top header------>
+			<div class="top_bar">
+				<div class="container">
+					<div class="row">
+						<div class="col d-flex flex-row">
+							<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{url('public/fontlink')}}/images/phone.png" alt=""></div>{{ $setting->phone }}</div>
+							<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{{url('public/fontlink')}}/images/mail.png" alt=""></div><a href="mailto:{{ $setting->email }}">{{ $setting->email }}</a></div>
+							<div class="top_bar_content ml-auto">
+								<div class="top_bar_user">
+									<div class="user_icon"><img src="{{url('public/fontlink')}}/images/user.svg" alt=""></div>
+									<div><a href="#">Register</a></div>
+									<div><a href="{{url('login')}}" target="_blank">Sign in</a></div>
+								</div>
+							</div> 
+						</div>
+					</div>
+				</div>		
+			</div>
+
+			<!------header-------->
+			<div class="header_main">
+				<div class="container-fluid">
+					<div class="row">
+						<!-- Logo -->
+						<div class="col-lg-2 col-sm-3 col-3 order-1">
+							<div class="logo_container">
+								<div class="logo"><a href="{{url('/')}}"><img src="{{ url($setting->setting_image) }}" class="img-fluid" style="height:60px; margin-left:10px;" alt=""></a></div>
+							</div>
+						</div>
+						<!-- Search -->
+						<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+							<div class="header_search">
+								<div class="header_search_content">
+									<div class="header_search_form_container">
+										<form action="{{url('search')}}" method="get" class="header_search_form clearfix">
+											@csrf
+											<input type="search" name="Prosearch" required="required" class="header_search_input" placeholder="Search for products...">
+											<button type="submit" class="header_search_button trans_300" value="Submit"><img src="{{url('public/fontlink')}}/images/search.png" alt=""></button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+			
+						<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+							<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+								<div class="wishlist d-flex flex-row align-items-center justify-content-end">
+									<div class="wishlist_icon"><img src="{{url('public/fontlink')}}/images/heart.png" alt=""></div>
+									<div class="wishlist_content">
+										<div class="wishlist_text"><a href="#">Wishlist</a></div>
+										<div class="wishlist_count">115</div>
+									</div>
+								</div>
+								
+								<div class="cart">
+									<div class="cart_container d-flex flex-row align-items-center justify-content-end">
+										<div class="cart_icon">
+											<img src="{{url('public/fontlink')}}/images/cart.png" alt="">
+											<div class="cart_count"><span>10</span></div>
+										</div>
+										<div class="cart_content">
+											<div class="cart_text"><a href="#">Cart</a></div>
+											<div class="cart_price">$85</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			<!-- Main Navigation bar -->
+
+			{{-- <div class="container-fluid" > --}}
+				<nav class="main_nav" style="position: sticky; top:0px; z-index:600;">{{--  --}}
+					<div class="container" >
+						<div class="row">
+							<div class="col">
+
+								<div class="main_nav_content d-flex flex-row" >
+									<!-- Categories Menu -->
+									<div class="cat_menu_container">
+										<div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+											<div class="cat_burger"><span></span><span></span><span></span></div>
+											<div class="cat_menu_text">CATEGORYS</div>
+										</div>
+
+										@php
+										$item=DB::table('item_information')->orderBy('id','ASC')->where('status',1)->get();
+										$category=DB::table('category_information')->where('status',1)->get();
+										$subcategory=DB::table('subcategory_information')->where('status',1)->get();
+
+										@endphp
+
+										<ul class="cat_menu" style="padding-top:-10px !important;">
+											<!-----main menu----->
+											@if(isset($item))
+											@foreach($item as $itemView)
+
+											<li class="hassubs">
+												<a href="{{url('itemProduct/'.$itemView->id)}}">{{$itemView->item_name}}<i class="fas fa-chevron-right"></i></a>
+												<ul>
+													<!----sub menu------>
+													@if(isset($category))
+													@foreach($category as $categoryView)
+													@if($itemView->id == $categoryView->item_id)
+													<li class="hassubs">
+														<a href="{{url('catProduct/'.$categoryView->id)}}">{{ $categoryView->category_name}}<i class="fas fa-chevron-right"></i></a>
+														<ul>
+															<!-----sub==Sub menu------->
+															@if(isset($subcategory))
+															@foreach($subcategory as $subcategoryView)
+															@if($categoryView->id == $subcategoryView->category_id)
+															<li class="hassubs">
+																<a href="{{url('SubcatProduct/'.$subcategoryView->id)}}">{{ $subcategoryView->subcategory_name}}<i class="fas fa-chevron-right"></i></a>
+															</li>
+															@endif
+															@endforeach
+															@endif
+														</ul>
+														<!-----sub==sub menu------>
+													</li>
+													@endif
+													@endforeach
+													@endif
+												</ul>
+												<!-----sun menu------>
+											</li>
+									
+											@endforeach
+											@endif
+										</ul>
+									</div>
+
+	
+
+									<div class="main_nav_menu ml-auto">
+								<ul class="standard_dropdown main_nav_dropdown">
+									<li><a href="#">Home<i class="fas fa-chevron-down"></i></a></li>
+									<li class="hassubs">
+										<a href="#">Super Deals<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li>
+												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
+												<ul>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Featured Brands<i class="fas fa-chevron-down"></i></a>
+										<ul>
+											<li>
+												<a href="#">Menu Item<i class="fas fa-chevron-down"></i></a>
+												<ul>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fas fa-chevron-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="hassubs">
+										<a href="#">Pages<i class="fas fa-chevron-down"></i></a>
+										<ul>
+													<li><a href="{{url('shop')}}">Shop<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('product')}}">Product<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('blog')}}">Blog<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('blog_single')}}">Blog Post<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('regular')}}">Regular Post<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('cart')}}">Cart<i class="fas fa-chevron-down"></i></a></li>
+													<li><a href="{{url('contact')}}">Contact<i class="fas fa-chevron-down"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="{{url('blog')}}">Blog<i class="fas fa-chevron-down"></i></a></li>
+											<li><a href="{{url('contact')}}">Contact<i class="fas fa-chevron-down"></i></a></li>
+								</ul>
+							</div>
+
+					
+
+
+									<div class="menu_trigger_container ml-auto">
+								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+									<div class="menu_burger">
+										<div class="menu_trigger_text">menu</div>
+										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+									</div>
+								</div>
+							</div>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</nav>
+
+
+			<div class="page_menu">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+
+							<div class="page_menu_content">
+
+								<div class="page_menu_search">
+									<form action="#">
+										<input type="search" required="required" class="page_menu_search_input" placeholder="Search for products...">
+									</form>
+								</div>
+								<ul class="page_menu_nav">
+									<li class="page_menu_item has-children">
+										<a href="#">Currency<i class="fa fa-angle-down"></i></a>
+										<ul class="page_menu_selection">
+											<li><a href="#">US Dollar<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">EUR Euro<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">GBP British Pound<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">JPY Japanese Yen<i class="fa fa-angle-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="page_menu_item">
+										<a href="#">Home<i class="fa fa-angle-down"></i></a>
+									</li>
+									<li class="page_menu_item has-children">
+										<a href="#">Super Deals<i class="fa fa-angle-down"></i></a>
+										<ul class="page_menu_selection">
+											<li><a href="#">Super Deals<i class="fa fa-angle-down"></i></a></li>
+											<li class="page_menu_item has-children">
+												<a href="#">Menu Item<i class="fa fa-angle-down"></i></a>
+												<ul class="page_menu_selection">
+													<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+													<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+												</ul>
+											</li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="page_menu_item has-children">
+										<a href="#">Featured Brands<i class="fa fa-angle-down"></i></a>
+										<ul class="page_menu_selection">
+											<li><a href="#">Featured Brands<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="page_menu_item has-children">
+										<a href="#">Trending Styles<i class="fa fa-angle-down"></i></a>
+										<ul class="page_menu_selection">
+											<li><a href="#">Trending Styles<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+											<li><a href="#">Menu Item<i class="fa fa-angle-down"></i></a></li>
+										</ul>
+									</li>
+									<li class="page_menu_item"><a href="blog.html">blog<i class="fa fa-angle-down"></i></a></li>
+									<li class="page_menu_item"><a href="contact.html">contact<i class="fa fa-angle-down"></i></a></li>
+								</ul>
+
+								<div class="menu_contact">
+									<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{{url('public/fontlink')}}/images/phone_white.png" alt=""> {{ $setting->phone }} </div></div>
+									<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{{url('public/fontlink')}}/images/mail_white.png" alt=""></div><a href="mailto:{{ $setting->email }}">{{ $setting->email }}</a></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</header>
